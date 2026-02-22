@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>龙虾养成记 - OpenClaw 系列课</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --accent-cyan: #00d4ff;
+            --accent-pink: #ff006e;
+            --accent-gold: #ffd700;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --border-subtle: rgba(255,255,255,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* 动态背景 */
+        .hero-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* 网格纹理 */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        /* 头部 */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 0.5rem 1.5rem;
+            margin-bottom: 2rem;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(0, 212, 255, 0.3); }
+            to { box-shadow: 0 0 20px rgba(0, 212, 255, 0.6); }
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 50%, var(--accent-pink) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--accent-gold);
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* 内容区域 */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        section:nth-child(1) { animation-delay: 0.1s; }
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.3s; }
+        section:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--accent-cyan);
+            border-left: 4px solid var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            color: var(--accent-pink);
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .highlight {
+            color: var(--text-primary);
+            background: linear-gradient(180deg, transparent 60%, rgba(0, 212, 255, 0.3) 60%);
+            padding: 0 0.25rem;
+        }
+
+        .quote {
+            border-left: 3px solid var(--accent-pink);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--text-primary);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+        }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .tips {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 110, 0.1));
+            border: 1px solid var(--border-subtle);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tips h4 {
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .footer-logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <header>
+        <div class="badge">OPENCLAW SERIES</div>
+        <h1>龙虾养成记</h1>
+        <p class="subtitle">一天消耗10亿token的AI Agent训练实录<br>从入门到精通，揭秘龙虾的正确打开方式</p>
+        <div class="meta">
+            <span>👤 陈财猫</span>
+            <span>📅 2026.02.22</span>
+            <span>⏱️ 2小时15分</span>
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <h2>为什么龙虾会爆火？</h2>
+            <p>陈财猫在分享中提出，OpenClaw 之所以能引起轰动，是因为它解决了上一代 AI 的多个硬伤：</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number">10亿</span>
+                    <span class="stat-label">日消耗Token</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">3天</span>
+                    <span class="stat-label">从入门到盈利</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">24h</span>
+                    <span class="stat-label">持续工作时长</span>
+                </div>
+            </div>
+
+            <div class="quote">
+                "以前 AI 永远是个新员工，不会变得更熟练。但龙虾通过 agent skills 和记忆系统，真正实现了边工作边学习。"
+            </div>
+        </section>
+
+        <section>
+            <h2>龙虾的正确打开方式</h2>
+            
+            <h3>1. 部署在自己的电脑上</h3>
+            <p>财猫强调，<span class="highlight">租云服务就像住酒店</span>，你不会给酒店房间置办家具。只有部署在自己的设备上，龙虾才能真正成为"你的"龙虾。</p>
+            
+            <div class="tips">
+                <h4>💡 硬件推荐</h4>
+                <ul>
+                    <li><strong>MacBook Air M1</strong> - 乞丐版 8+256，京东仅2200元</li>
+                    <li>续航20+小时，冷得像冰，工业级设计</li>
+                    <li>给龙虾一个"单间"，随便它怎么折腾</li>
+                </ul>
+            </div>
+
+            <h3>2. 使用最好的模型</h3>
+            <p>如果有条件，一定要用 <span class="highlight">Claude Opus 4.6</span>。目前无平替。次优选择是 GPT 5.3-Codex，但体验完全不同。</p>
+
+            <h3>3. 耐心调教，沉淀 Skills</h3>
+            <p>核心心法：<strong>Agent Skills is All You Need</strong></p>
+            <ul>
+                <li>第一次：手把手把任务跑通</li>
+                <li>第二步：@龙虾沉淀为 skills</li>
+                <li>第三步：重复执行 n 次</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>常见坑与解决方案</h2>
+            
+            <h3>🐛 上手曲线陡峭</h3>
+            <p>OpenClaw 一天一个版本，一周就是上古版本。配置 openclaw.json 时各种 bug 层出不穷。</p>
+            
+            <h3>💰 价格昂贵</h3>
+            <p>输入15万token，输出仅164token。所有钱都是输入占的。解决方案：</p>
+            <ul>
+                <li>善用闲鱼、302等中转站</li>
+                <li>趁大厂 coding plan 没涨价赶紧买</li>
+                <li>沉淀 skills 后用便宜模型跑</li>
+            </ul>
+
+            <h3>🎲 随机性</h3>
+            <p>大模型像动物而非机械，每次执行都有随机性。但这正是其价值所在——能在混沌中解决问题。</p>
+        </section>
+
+        <section>
+            <h2>创造者的品味</h2>
+            
+            <p>财猫引用 Paul Graham 的《Taste for Makers》强调：</p>
+            
+            <div class="quote">
+                "伟大作品的配方是极为严苛的品位，加上满足这种品位的能力。"
+            </div>
+
+            <p>不要产出 AI 泔水（AI Slop）。当你看到龙虾产出第一个完美作品时，天灵盖会有触电般的麻感——<span class="highlight">这就是对的</span>。</p>
+
+            <div class="tips">
+                <h4>🎯 核心心法</h4>
+                <ul>
+                    <li>你是老板，不是执行者</li>
+                    <li>知道什么是好的，比怎么做更重要</li>
+                    <li>一块钱token要打出两块钱价值</li>
+                    <li>人人都是狗资本家时代已来</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-logo">🦞</div>
+        <p>WaytoAGI 晚8点共学 · 2026年2月22日</p>
+        <p style="margin-top: 0.5rem; opacity: 0.6;">OpenClaw 系列课 · 龙虾饲养营</p>
+    </footer>
+</body>
+</html>
